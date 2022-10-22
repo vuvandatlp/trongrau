@@ -1,0 +1,121 @@
+#define sensor2 1
+#define sensor1 2
+#define S0 2
+#define S1 4
+#define S2 10
+#define S3 11
+
+#define sensorout 10
+#define hongngoaiout1 0
+#define hongngoaiout2 12
+int hongngoai2;
+int hongngoai1;
+int green, red, blue;
+int redFrequency = 0;
+int greenFrequency = 0;
+int blueFrequency = 0;
+int frequency = 0;
+int color = 0;
+void setup() {
+Serial.begin(9600);
+
+pinMode(S0, OUTPUT);
+pinMode(S1, OUTPUT);
+pinMode(S2, OUTPUT);
+pinMode(S3, OUTPUT);
+pinMode(sensorout, INPUT);
+digitalWrite(S0, HIGH);// tần số của tín hiệu đầu ra là 20%
+digitalWrite(S1, LOW);//// tần số của tín hiệu đầu ra là 20%
+
+}
+color = readColor();
+
+if (color == 1) {
+while (digitalRead(sensor1) == 0) {
+
+color = 0;
+daysp1();
+delay(100);
+}
+}
+
+if (color == 3) {
+while (digitalRead(sensor2) == 0) {
+
+daysp2();
+color = 0;
+
+delay(100);
+}
+}
+if (color == 2) {
+if (digitalRead(sensor2) == 0) {
+}
+}
+}
+int readColor() {
+//------------------------------------------------------------------- Đoc tần số màu đỏ
+digitalWrite(S2, LOW);
+digitalWrite(S3, LOW);
+frequency = pulseIn(sensorout, LOW);
+int R = frequency;
+
+//-------------------------------------------------------------------- Đoc tần số màu xanh lá
+digitalWrite(S2, HIGH);
+digitalWrite(S3, HIGH);
+frequency = pulseIn(sensorout, LOW);
+int G = frequency;
+
+// ------------------------------------------------------------------ Đoc tần số màu xanh dương
+digitalWrite(S2, LOW);
+digitalWrite(S3, HIGH);
+frequency = pulseIn(sensorout, LOW);
+int B = frequency;
+
+if (R < 250 && R > 140 && G < 160 && G > 100 && B < 75 && B > 50) {
+color = 1; // Blue
+
+}
+if (R < 70 && R > 50 && G < 55 && G > 40 && B < 40 && B > 32) {
+color = 2; // Red
+
+}
+if (R < 220 && R > 150 && G < 110 && G > 82 && B < 110 && B > 65 ) {
+color = 3; // Green
+
+}
+return color;
+
+}
+void daysp1()
+{
+ int k=0;
+ while (true)
+ {
+ if(digitalRead(hongngoaiout1)==LOW)
+ {
+ digitalWrite(2, HIGH);
+ delay(400);
+ //digitalWrite(4,LOW);
+ k=k+1;
+ if(k>0);
+ break;
+ }
+ }
+}
+void daysp2()
+{
+ int k1=0;
+ while (true)
+ {
+ if(digitalRead(hongngoaiout2)==LOW)
+ {
+ digitalWrite(2, HIGH);
+ delay(400);
+ //digitalWrite(4,LOW);
+ k1=k1+1;
+ if(k1>0);
+ break;
+ }
+ }
+}
